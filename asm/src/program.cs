@@ -1,14 +1,14 @@
-﻿/*
-    ASM (Arduino Serial Manager)
-
-    Questo progetto è distribuito sotto licenza MIT.
-    Questo progetto è disponibile su GitHub.
-
-    Repository:     https://github.com/reallukee/arduino/
-    Descrizione:    MAIN
-    Autore:         Luca Pollicino (https://github.com/reallukee/)
-    Versione:       1.0.0
-*/
+﻿//
+//  ASM(Arduino Serial Manager)
+//
+//  Questo progetto è distribuito sotto licenza MIT.
+//  Questo progetto è disponibile su GitHub.
+//
+//  Repository:     https://github.com/reallukee/arduino/
+//  Descrizione:    MAIN
+//  Autore:         Luca Pollicino (https://github.com/reallukee/)
+//  Versione:       1.0.0
+//
 
 using System;
 using System.Collections;
@@ -19,16 +19,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace asm.src
+namespace ASM
 {
     internal class Program
     {
         static Thread ReadThread;
         static SerialPort Arduino;
 
-        const string WORK = "\x1b[0;90m[\x1b[94m....\x1b[90m]\x1b[37;3m";
+
+        const string WORK = "\x1b[0;90m[\x1b[93m....\x1b[90m]\x1b[37;3m";
         const string INFO = "\x1b[0;90m[\x1b[92mINFO\x1b[90m]\x1b[37;3m";
-        const string WARN = "\x1b[0;90m[\x1b[93mWARN\x1b[90m]\x1b[37;3m";
         const string FAIL = "\x1b[0;90m[\x1b[91mFAIL\x1b[90m]\x1b[37;3m";
 
 
@@ -44,7 +44,7 @@ namespace asm.src
 
             foreach (string S in SerialPort.GetPortNames())
             {
-                Console.WriteLine($"     \x1b[0m* \x1b[96m{S}");
+                Console.WriteLine($"     \x1b[0m* \x1b[96m{S} {SerialPort.GetPortNames}");
             }
 
             Console.WriteLine("\n    \x1b[0mPort Name");
@@ -70,6 +70,8 @@ namespace asm.src
             catch
             {
                 Console.WriteLine($"\x1b[0m<<< {FAIL} Connessione Fallita!");
+                Console.ReadKey();
+                return;
             }
 
             ReadThread.Start();
@@ -94,6 +96,8 @@ namespace asm.src
             catch
             {
                 Console.WriteLine($"\x1b[0m<<< {FAIL} Disconnessione Fallita!");
+                Console.ReadKey();
+                return;
             }
         }
 
@@ -126,18 +130,20 @@ namespace asm.src
 
             string Data = Console.ReadLine();
 
-            if (Data.ToUpper() == "QUIT")
+            if (Data.ToUpper() == "!QUIT")
             {
                 return false;
             }
-
-            try
+            else
             {
-                Arduino.WriteLine(Data);
-            }
-            catch (Exception Ex)
-            {
-                Console.WriteLine($"{FAIL} {Ex.Message}");
+                try
+                {
+                    Arduino.Write(Encoding.UTF8.GetBytes(Data), 0, Data.Length);
+                }
+                catch (Exception Ex)
+                {
+                    Console.WriteLine($"{FAIL} {Ex.Message}");
+                }
             }
 
             return true;
