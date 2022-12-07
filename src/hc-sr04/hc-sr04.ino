@@ -15,6 +15,8 @@ void setup()
 {
   pinMode(LED, OUTPUT);
   pinMode(BUZZER, OUTPUT);
+
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop()

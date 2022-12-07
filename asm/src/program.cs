@@ -44,7 +44,7 @@ namespace ASM
 
             foreach (string S in SerialPort.GetPortNames())
             {
-                Console.WriteLine($"     \x1b[0m* \x1b[96m{S} {SerialPort.GetPortNames}");
+                Console.WriteLine($"     \x1b[0m* \x1b[96m{S}");
             }
 
             Console.WriteLine("\n    \x1b[0mPort Name");
